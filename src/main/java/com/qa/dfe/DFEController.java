@@ -3,10 +3,9 @@ package com.qa.dfe;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,16 +25,13 @@ public class DFEController {
 	}
 
 	@GetMapping("/marsupial/{id}")
-	public Marsupial getMarsupialByIndex(@PathParam("id") Integer id) {
-		System.out.println("This is the id: " + id);
-		this.marsupials.get(id);
-		return null;
+	public Marsupial getMarsupialByIndex(@PathVariable Integer id) {
+		return this.marsupials.get(id);
 	}
 
 	@GetMapping("marsupials/all")
 	public List<Marsupial> getAllMarsupials() {
-
-		return null;
+		return this.marsupials;
 	}
 
 	@PostMapping("/createMarsupial")
@@ -48,13 +44,13 @@ public class DFEController {
 	@PutMapping("/updateMarsupial/{id}")
 	public Marsupial updateMarsupial(@RequestBody Marsupial marsupial, Integer id) {
 		System.out.println("Updated Marsupial: " + marsupial);
-		System.out.println("ID: " + id);
-		return null;
+		return this.marsupials.set(id, marsupial);
 	}
 
 	@DeleteMapping("/deleteMarsupial{id}")
-	public String deleteMarsupial(Integer id) {
-
-		return null;
+	public String deleteMarsupial(@PathVariable Integer id) {
+		Marsupial toDelete = this.marsupials.get(id);
+		this.marsupials.remove(toDelete);
+		return "Deleted: " + toDelete;
 	}
 }

@@ -5,11 +5,9 @@ public class Marsupial {
 	private String name;
 	private String species;
 	private String colour;
-	private int id;
 
 	public Marsupial(String name, String species, String colour, int id) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.species = species;
 		this.colour = colour;
