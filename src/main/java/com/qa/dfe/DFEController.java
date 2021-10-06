@@ -1,8 +1,9 @@
 package com.qa.dfe;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,46 +12,59 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController // enables http endpoints
-
 // if spring receives a GET request at /hello
 // call vv THIS vv method
 
+@RestController // enables http endpoints AND tells Spring to make a Bean of this class
 public class DFEController {
-	private List<Marsupial> marsupials = new ArrayList<>();
+
+	private DFEService service;
+
+	public DFEController(DFEService service) {
+		super();
+		this.service = service;
+	}
+
+	// if spring receives a GET request at /hello
+	// call vv THIS vv method
 
 	@GetMapping("/hello")
 	public String hello() {
-		return "Hello, World!";
+		return "Hello, DFE!";
 	}
 
-	@GetMapping("/marsupial/{id}")
+	@GetMapping("/goodbye")
+	public String bye() {
+		return "So long!";
+	}
+
+	@GetMapping("/getMarsupial/{id}") // 200
 	public Marsupial getMarsupialByIndex(@PathVariable Integer id) {
-		return this.marsupials.get(id);
+
+		return this.service.getMarsupialByIndex(id);
 	}
 
-	@GetMapping("marsupials/all")
+	@GetMapping("/getAllMarsupials") // 200
 	public List<Marsupial> getAllMarsupials() {
-		return this.marsupials;
+		return this.service.getAllMarsupials();
 	}
 
-	@PostMapping("/createMarsupial")
-	public Marsupial createMarsupial(@RequestBody Marsupial marsupial) {
-		System.out.println("Created Marsupial: " + marsupial);
-		this.marsupials.add(marsupial);
-		return this.marsupials.get(this.marsupials.size() - 1);
+	@PostMapping("/createMarsupial") // 201
+	public ResponseEntity<Marsupial> createMarsupial(@RequestBody Marsupial marsupial) {
+		Marsupial responseBody = this.service.createMarsupial(marsupial);
+		ResponseEntity<Marsupial> response = new ResponseEntity<Marsupial>(responseBody, HttpStatus.CREATED);
+		return response;
 	}
 
-	@PutMapping("/updateMarsupial/{id}")
-	public Marsupial updateMarsupial(@RequestBody Marsupial marsupial, Integer id) {
-		System.out.println("Updated Marsupial: " + marsupial);
-		return this.marsupials.set(id, marsupial);
+	@PutMapping("/updateMarsupial/{id}") // 202 - Accepted
+	public ResponseEntity<Marsupial> updateMarsupial(@RequestBody Marsupial marsupial, @PathVariable Integer id) {
+		Marsupial responseBody = this.service.updateMarsupial(marsupial, id); // replaces the marsupial at that index
+		return new ResponseEntity<Marsupial>(responseBody, HttpStatus.ACCEPTED);
 	}
 
-	@DeleteMapping("/deleteMarsupial{id}")
-	public String deleteMarsupial(@PathVariable Integer id) {
-		Marsupial toDelete = this.marsupials.get(id);
-		this.marsupials.remove(toDelete);
-		return "Deleted: " + toDelete;
+	@DeleteMapping("/removeMarsupial/{id}") // 204 - No content
+	public ResponseEntity<?> deleteMarsupial(@PathVariable Integer id) {
+		this.service.deleteMarsupial(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 causes the body to be ignored
 	}
 }
