@@ -33,12 +33,12 @@ public class DFEController {
 		return this.service.getMarsupialByIndex(id);
 	}
 
-	@GetMapping() // 200
+	@GetMapping // 200
 	public List<Marsupial> getAllMarsupials() {
 		return this.service.getAllMarsupials();
 	}
 
-	@PostMapping() // 201
+	@PostMapping // 201
 	public ResponseEntity<Marsupial> createMarsupial(@RequestBody Marsupial marsupial) {
 		Marsupial responseBody = this.service.createMarsupial(marsupial);
 		return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
