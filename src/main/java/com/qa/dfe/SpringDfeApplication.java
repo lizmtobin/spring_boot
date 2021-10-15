@@ -1,5 +1,7 @@
 package com.qa.dfe;
 
+import com.qa.dfe.api.DFEController;
+import com.qa.dfe.domain.DFEListService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +16,7 @@ public class SpringDfeApplication {
 
 		System.out.println(controllerBean);
 
-		DFEController myController = new DFEController(new DFEServiceList());
+		DFEController myController = new DFEController(new DFEListService());
 	}
 
 }

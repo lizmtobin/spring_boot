@@ -1,4 +1,4 @@
-package com.qa.dfe;
+package com.qa.dfe.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,18 +19,15 @@ public class Marsupial {
 	private String colour;
 
 	public Marsupial(Integer id, String name, String species, String colour) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.species = species;
 		this.colour = colour;
 	}
 
-	public Marsupial() { // REQUIRED
-		super();
-	}
-
 	// REQUIRED
+
+	public Marsupial() {}
 
 	public Integer getId() {
 		return id;

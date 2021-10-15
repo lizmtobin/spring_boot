@@ -1,4 +1,4 @@
-package com.qa.dfe;
+package com.qa.dfe.domain;
 
 import java.util.List;
 

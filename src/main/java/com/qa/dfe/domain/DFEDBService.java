@@ -1,55 +1,52 @@
-package com.qa.dfe;
+package com.qa.dfe.domain;
 
+import com.qa.dfe.persistence.MarsupialRepository;
 import java.util.List;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import com.qa.dfe.Marsupial;
-import com.qa.dfe.MarsupialRepo;
-
 @Service
 @Primary
-public class DFEServiceDB implements DFEService {
+public class DFEDBService implements DFEService {
 
-	private MarsupialRepo repo;
+	private final MarsupialRepository repo;
 
-	public DFEServiceDB(MarsupialRepo repo) {
-		super();
+	public DFEDBService(MarsupialRepository repo) {
 		this.repo = repo;
 	}
 
 	@Override
 	public Marsupial getMarsupialByIndex(Integer id) {
-		return this.repo.findById(id).get();
+		return repo.findById(id).orElseThrow(() -> new RuntimeException("Marsupial not found"));
 	}
 
 	@Override
 	public List<Marsupial> getAllMarsupials() {
 		// SELECT * FROM marsupial;
-		return this.repo.findAll();
+		return repo.findAll();
 	}
 
 	@Override
 	public Marsupial createMarsupial(Marsupial marsupial) {
-		return this.repo.save(marsupial);
+		return repo.save(marsupial);
 	}
 
 	@Override
 	public Marsupial updateMarsupial(Marsupial marsupial, Integer id) {
 		// NEVER TRY AND CHANGE THE ID
-		Marsupial toUpdate = this.repo.findById(id).get();
+		Marsupial toUpdate = repo.findById(id).orElseThrow(() -> new RuntimeException("Marsupial not found"));
 
 		toUpdate.setColour(marsupial.getColour());
 		toUpdate.setName(marsupial.getName());
 		toUpdate.setSpecies(marsupial.getSpecies());
 
-		return this.repo.save(toUpdate);
+		return repo.save(toUpdate);
 	}
 
 	@Override
 	public void deleteMarsupial(Integer id) {
-		this.repo.deleteById(id);
+		repo.deleteById(id);
 	}
 
 }
